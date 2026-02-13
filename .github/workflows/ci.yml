@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.2]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v3
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, bcmath, pcntl, pdo_sqlite
+          coverage: none
+
+      - name: Get composer cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --no-scripts
+
+      - name: Prepare .env
+        run: cp .env.example .env
+
+      - name: Create SQLite database
+        run: |
+          touch database/database.sqlite
+          php artisan key:generate --ansi
+          php artisan migrate --force
+
+      - name: Run test suite
+        run: php artisan test --parallel=0 --verbose
