@@ -1,6 +1,7 @@
 <template>
-  <div class="max-w-2xl mx-auto">
-    <h1 class="text-3xl font-bold mb-8">Login</h1>
+  <transition name="fade" mode="out-in">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-3xl font-bold mb-8">Login</h1>
 
     <div class="bg-white p-8 rounded-lg shadow">
       <form @submit.prevent="login">
@@ -31,6 +32,7 @@
       </p>
     </div>
   </div>
+  </transition>
 </template>
 
 <script>

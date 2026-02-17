@@ -45,6 +45,7 @@
             </div>
 
             <!-- ===== LOGIN PAGE ===== -->
+            <transition name="fade" mode="out-in">
             <template v-if="!isAuthenticated && !showRegister">
                 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
                     <div class="max-w-md w-full mx-auto">
@@ -81,8 +82,10 @@
                     </div>
                 </div>
             </template>
+            </transition>
 
             <!-- ===== REGISTER PAGE ===== -->
+            <transition name="fade" mode="out-in">
             <template v-if="!isAuthenticated && showRegister">
                 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100">
                     <div class="max-w-md w-full mx-auto">
@@ -91,6 +94,9 @@
                                 <div class="text-5xl mb-3">📝</div>
                                 <h2 class="text-3xl font-bold text-gray-800">Créer un compte</h2>
                                 <p class="text-gray-500 mt-2">Rejoignez Stock Manager</p>
+                            </div>
+                            <div class="mb-4 text-right">
+                                <button type="button" @click="showRegister = false" class="text-sm text-gray-600 hover:underline">← Retour à la connexion</button>
                             </div>
                             <form @submit.prevent="register()" class="space-y-4">
                                 <div>
@@ -118,6 +124,7 @@
                     </div>
                 </div>
             </template>
+            </transition>
 
             <!-- ===== DASHBOARD PAGE ===== -->
             <template v-if="isAuthenticated && currentPage === 'dashboard'">

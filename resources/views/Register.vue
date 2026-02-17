@@ -1,17 +1,23 @@
 <template>
-  <div class="max-w-2xl mx-auto">
-    <h1 class="text-3xl font-bold mb-8">Register</h1>
+  <transition name="fade" mode="out-in">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-3xl font-bold mb-8">Register</h1>
 
     <div class="bg-white p-8 rounded-lg shadow">
       <form @submit.prevent="register">
-        <div class="mb-6">
-          <label class="block text-gray-700 font-bold mb-2">Name</label>
-          <input 
-            v-model="name" 
-            type="text" 
-            class="w-full px-4 py-2 border rounded"
-            required
-          >
+        <div class="mb-6 flex justify-between items-center">
+          <div>
+            <label class="block text-gray-700 font-bold mb-2">Name</label>
+            <input 
+              v-model="name" 
+              type="text" 
+              class="w-full px-4 py-2 border rounded"
+              required
+            >
+          </div>
+          <div class="ml-4">
+            <button type="button" @click="router.push('/login')" class="bg-gray-200 text-gray-800 px-3 py-2 rounded hover:bg-gray-300">Retour</button>
+          </div>
         </div>
         <div class="mb-6">
           <label class="block text-gray-700 font-bold mb-2">Email</label>
@@ -40,6 +46,7 @@
       </p>
     </div>
   </div>
+  </transition>
 </template>
 
 <script>
