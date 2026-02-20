@@ -27,5 +27,5 @@ RUN composer install --no-dev --optimize-autoloader
 # On donne les droits d'accès pour que Laravel puisse écrire dans les logs et le cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Commande pour démarrer le serveur sur le port que Render nous donne
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+# On utilise un script shell pour lancer la migration PUIS le serveur
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
