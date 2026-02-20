@@ -17,27 +17,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create users with different roles
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-            'role' => User::ROLE_ADMIN,
-        ]);
+        // Au lieu de User::factory(), on utilise User::create() en direct
+        \App\Models\User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Manager User',
-            'email' => 'manager@example.com',
-            'password' => bcrypt('password'),
-            'role' => User::ROLE_MANAGER,
-        ]);
+        \App\Models\User::updateOrCreate(
+            ['email' => 'manager@example.com'],
+            [
+                'name' => 'Manager User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role' => 'manager',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Observer User',
-            'email' => 'observer@example.com',
-            'password' => bcrypt('password'),
-            'role' => User::ROLE_OBSERVER,
-        ]);
+        \App\Models\User::updateOrCreate(
+            ['email' => 'observer@example.com'],
+            [
+                'name' => 'Observer User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role' => 'observer',
+            ]
+        );
 
         // Create categories
         $electronics = Category::create([
