@@ -1,38 +1,31 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-# Installation des dépendances système et des extensions PHP pour MySQL
+# Installation des dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
+    git \
+    curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     zip \
     unzip \
-    git \
-    curl \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    libpq-dev
 
-# Activation du module rewrite d'Apache (important pour les routes Laravel)
-RUN a2enmod rewrite
+# Installation des extensions PHP pour MySQL et Laravel
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Installation de Composer
+# Récupération de Composer (le gestionnaire de paquets PHP)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Définition du dossier de travail
-WORKDIR /var/www/html
-
-# Copie du projet dans le conteneur
+WORKDIR /var/www
 COPY . .
 
 # Installation des dépendances du projet
 RUN composer install --no-dev --optimize-autoloader
 
-# Configuration des permissions pour Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# On donne les droits d'accès pour que Laravel puisse écrire dans les logs et le cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Modification du DocumentRoot d'Apache pour pointer vers /public
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
-
-# Exposition du port (Render utilise souvent 80 ou 10000, Apache utilise 80 par défaut)
-EXPOSE 80
+# Commande pour démarrer le serveur sur le port que Render nous donne
+CMD php artisan serve --host=0.0.0.0 --port=$PORT
