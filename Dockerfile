@@ -29,4 +29,4 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Correction de la commande CMD
 # On utilise une syntaxe simple pour éviter l'erreur "not found"
-CMD php artisan migrate:fresh --seed --force && php artisan serve --host=0.0.0.0 --port=10000
+CMD php artisan migrate --seed --force && php artisan serve --host=0.0.0.0 --port=10000
